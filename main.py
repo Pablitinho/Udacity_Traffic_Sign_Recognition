@@ -257,70 +257,66 @@ dropout_value = 0.5 # Percentage  to apply in the dropout layer
 # ----------------------------------------------------------------------------
 ph_train, ph_train_labels, output_nn, graph_1, loss, train,keep_prob,accuracy_op,labels_pred_softmax = cnn.generate_graph_cnn(image_shape, n_classes)
 
-  Debug = 0
-  tf.logging.set_verbosity(tf.logging.INFO)
-  cnt = 0
-  # ----------------------------------------------------------------------------
-  # Training
-  # ----------------------------------------------------------------------------
-  with tf.Session(graph=graph_1) as session:
-      tf.global_variables_initializer().run()
-      merged_summary = tf.summary.merge_all()
-      summary_writer = tf.summary.FileWriter('./Summary', graph_1)
-      print('Initialized')
-      my_file = Path("./Models/Project2.ckpt.index")
-      if my_file.is_file():
-          tf.train.Saver().restore(session, "./Models/Project2.ckpt")
+Debug = 1
+tf.logging.set_verbosity(tf.logging.INFO)
+cnt = 0
+# ----------------------------------------------------------------------------
+# Training
+# ----------------------------------------------------------------------------
+with tf.Session(graph=graph_1) as session:
+  tf.global_variables_initializer().run()
+  merged_summary = tf.summary.merge_all()
+  summary_writer = tf.summary.FileWriter('./Summary', graph_1)
+  print('Initialized')
+  my_file = Path("./Models/Project2.ckpt.index")
+  if my_file.is_file():
+      tf.train.Saver().restore(session, "./Models/Project2.ckpt")
 
-      shape_X = X_train.shape
-      if Debug == 0:
-          for epoch in range(num_epochs):
-              # for iter in range(num_iters):
-              for offset in range(0, X_train.shape[0], batch_size):
-                  end = offset + batch_size
-                  X_Batch, Y_Batch = X_train[offset:end], Y_train[offset:end]
-                  # idx = np.random.permutation(X_train.shape[0])[:batch_size]
-                  feed_dict = {ph_train: X_Batch, ph_train_labels: Y_Batch, keep_prob: dropout_value}
-                  # feed_dict = {ph_train: X_train[idx], ph_train_labels: Y_train[idx], keep_prob: dropout_value}
-                  _, l, predictions = session.run([train, loss, output_nn], feed_dict=feed_dict)
+  shape_X = X_train.shape
+  if Debug == 0:
+      for epoch in range(num_epochs):
+          # for iter in range(num_iters):
+          for offset in range(0, X_train.shape[0], batch_size):
+              end = offset + batch_size
+              X_Batch, Y_Batch = X_train[offset:end], Y_train[offset:end]
+              # idx = np.random.permutation(X_train.shape[0])[:batch_size]
+              feed_dict = {ph_train: X_Batch, ph_train_labels: Y_Batch, keep_prob: dropout_value}
+              # feed_dict = {ph_train: X_train[idx], ph_train_labels: Y_train[idx], keep_prob: dropout_value}
+              _, l, predictions = session.run([train, loss, output_nn], feed_dict=feed_dict)
 
-                  if offset % (X_train.shape[0] / 2) == 0:
-                      feed_dict = {ph_train: X_Batch, ph_train_labels: Y_Batch, keep_prob: 1}
-                      # feed_dict = {ph_train: X_train[idx], ph_train_labels: Y_train[idx], keep_prob: 1}
-                      summary, _, l, predictions, accur = session.run(
-                          [merged_summary, train, loss, output_nn, accuracy_op], feed_dict=feed_dict)
-                      summary_writer.add_summary(summary, epoch)
+              if offset % (X_train.shape[0] / 2) == 0:
+                  feed_dict = {ph_train: X_Batch, ph_train_labels: Y_Batch, keep_prob: 1}
+                  # feed_dict = {ph_train: X_train[idx], ph_train_labels: Y_train[idx], keep_prob: 1}
+                  summary, _, l, predictions, accur = session.run(
+                      [merged_summary, train, loss, output_nn, accuracy_op], feed_dict=feed_dict)
+                  summary_writer.add_summary(summary, epoch)
 
-              print("EPOCH: ", epoch)
-              print("Train accuracy: %.1f%%" % get_accuracy(X_train, Y_train, session, train, accuracy_op,
-                                                            labels_pred_softmax, batch_size))
-              print("Valid accuracy: %.1f%%" % get_accuracy(X_valid, Y_valid, session, train, accuracy_op,
-                                                            labels_pred_softmax, batch_size))
-              #
-              #     feed_dict = {ph_train: X_train[idx], ph_train_labels: Y_train[idx], keep_prob: 1}
-              #     summary,_, l, predictions,accur = session.run([merged_summary, train, loss, output_nn, accuracy_op], feed_dict=feed_dict)
-              #     summary_writer.add_summary(summary, epoch)
-              #     accur*=100
-              #
-              #     print("Minibatch loss at epoch %d: %f" % (epoch, l))
-              #     print(" Minibatch accuracy: %.6f%%" % accur)
+          print("EPOCH: ", epoch)
+          print("Train accuracy: %.1f%%" % get_accuracy(X_train, Y_train, session, train, accuracy_op,
+                                                        labels_pred_softmax, batch_size))
+          print("Valid accuracy: %.1f%%" % get_accuracy(X_valid, Y_valid, session, train, accuracy_op,
+                                                        labels_pred_softmax, batch_size))
+          print("Test accuracy: %.1f%%" % get_accuracy(X_test, Y_test, session, train, accuracy_op,
+                                                        labels_pred_softmax, batch_size))
 
-              tf.train.Saver().save(session, "./Models/Project2.ckpt")
-          summary_writer.close()
-      print("Train accuracy: %.1f%%" % get_accuracy(X_train, Y_train, session, train, accuracy_op, labels_pred_softmax,
-                                                    batch_size))
-      print("Valid accuracy: %.1f%%" % get_accuracy(X_valid, Y_valid, session, train, accuracy_op, labels_pred_softmax,
-                                                    batch_size))
+          tf.train.Saver().save(session, "./Models/Project2.ckpt")
+      summary_writer.close()
 
-  feed_dict = {ph_train: X_valid, ph_train_labels: Y_valid, keep_prob: 1}
-  accur,labels_pred_softmax = session.run([accuracy_op,labels_pred_softmax], feed_dict = feed_dict)
-  accur*=100
-  print("Valid accuracy: %.1f%%" % accur)
+  print("Train accuracy: %.1f%%" % get_accuracy(X_train, Y_train, session, train, accuracy_op, labels_pred_softmax,
+                                                batch_size))
+  print("Valid accuracy: %.1f%%" % get_accuracy(X_valid, Y_valid, session, train, accuracy_op, labels_pred_softmax,
+                                                batch_size))
+  print("Test accuracy: %.1f%%" % get_accuracy(X_test, Y_test, session, train, accuracy_op, labels_pred_softmax,
+                                                batch_size))
+# feed_dict = {ph_train: X_valid, ph_train_labels: Y_valid, keep_prob: 1}
+# accur,labels_pred_softmax = session.run([accuracy_op,labels_pred_softmax], feed_dict = feed_dict)
+# accur*=100
+# print("Valid accuracy: %.1f%%" % accur)
 
-  classes_gt = [np.where(r == 1)[0][0] for r in Y_valid]
-  print("Classes GT", classes_gt)
+classes_gt = [np.where(r == 1)[0][0] for r in Y_valid]
+print("Classes GT", classes_gt)
 
-  classes_validation = [np.where(np.max(r))[0][0] for r in labels_pred_softmax]
-  print("Classes Validation", classes_validation)
+classes_validation = [np.where(np.max(r))[0][0] for r in labels_pred_softmax]
+print("Classes Validation", classes_validation)
 
-  tf.contrib.metrics.confusion_matrix(classes_gt,classes_validation)
+tf.contrib.metrics.confusion_matrix(classes_gt,classes_validation)
