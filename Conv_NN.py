@@ -270,5 +270,5 @@ def generate_graph_cnn(shape,num_classes):
         train = optimizer.minimize(loss)
         # ----------------------------------------------------------------------------------
 
-    return ph_train, ph_train_labels, output_nn, graph_1, loss, train, keep_prob,accuracy_op,labels_pred_softmax
+    return ph_train, ph_train_labels, output_nn, graph_1, loss, train, keep_prob,accuracy_op,labels_pred_softmax,layer_3
 #----------------------------------------------------------------------------------

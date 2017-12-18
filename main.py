@@ -247,7 +247,7 @@ print('Augmented data loaded')
 # ----------------------------------------------------------------------------
 # Parameters used in this project
 # ----------------------------------------------------------------------------
-num_epochs = 50 # num of iterations
+num_epochs = 14 # num of iterations
 num_iters = 1000
 num_steps = 100 # each x number of epochs, It will be displayed the loss
 batch_size = 128 # Size of the batch
@@ -255,9 +255,9 @@ dropout_value = 0.5 # Percentage  to apply in the dropout layer
 # ----------------------------------------------------------------------------
 # Create the graph
 # ----------------------------------------------------------------------------
-ph_train, ph_train_labels, output_nn, graph_1, loss, train,keep_prob,accuracy_op,labels_pred_softmax = cnn.generate_graph_cnn(image_shape, n_classes)
+ph_train, ph_train_labels, output_nn, graph_1, loss, train,keep_prob,accuracy_op,labels_pred_softmax,layer_3 = cnn.generate_graph_cnn(image_shape, n_classes)
 
-Debug = 1
+Debug = 0
 tf.logging.set_verbosity(tf.logging.INFO)
 cnt = 0
 # ----------------------------------------------------------------------------
@@ -269,8 +269,8 @@ with tf.Session(graph=graph_1) as session:
   summary_writer = tf.summary.FileWriter('./Summary', graph_1)
   print('Initialized')
   my_file = Path("./Models/Project2.ckpt.index")
-  if my_file.is_file():
-      tf.train.Saver().restore(session, "./Models/Project2.ckpt")
+  #if my_file.is_file():
+  #    tf.train.Saver().restore(session, "./Models/Project2.ckpt")
 
   shape_X = X_train.shape
   if Debug == 0:
