@@ -8,6 +8,7 @@ from pathlib import Path
 import logging
 import sys
 import cv2
+import matplotlib.cm as cm
 import Augmentation as augmen
 # ------------------------------------------------------------------------------------
 def image_histogram_equalization(image, number_bins=256):
@@ -36,9 +37,19 @@ def normalize_data(dataset):
   #         im =cv2.equalizeHist(c[:,:,0])
   #         dataset[i, :, :,channel] = im
   #grayscale
+  im_idx=1189
+  im_color = np.uint8(dataset[im_idx,:,:,:])
+  plt.imsave('./images/writeup/original_color.png',im_color)
   dataset = np.uint8(np.sum(dataset / 3, axis=3, keepdims=True))
+  im_gray = np.uint8(dataset[im_idx, :, :, :])
+  im_gray = np.squeeze(im_gray,axis=2)
+  plt.imsave('./images/writeup/original_grey.png',im_gray,cmap=cm.gray)
   for i in range(dataset.shape[0]):
       dataset[i, :, :,0] =  cv2.equalizeHist(dataset[i, :, :,0])
+      im_gray = np.uint8(cv2.equalizeHist(dataset[im_idx, :, :,0]))
+      #im_gray = np.squeeze(im_gray,axis=2)
+      plt.imsave('./images/writeup/original_grey_Equalized.png',im_gray,cmap=cm.gray)
+      ii=0
 
   #normalization
   dataset = (dataset/255)-0.5
@@ -166,7 +177,7 @@ print("Number of classes =", n_classes)
 print("Normalize")
 image_shape[2] = 1
 # Normalize the images and generate the hot-ones
-# X_train, Y_train = normalize_data(train['features']), create_hot_ones(train['labels'], n_classes)
+X_train, Y_train = normalize_data(train['features']), create_hot_ones(train['labels'], n_classes)
 # X_valid, Y_valid = normalize_data(valid['features']), create_hot_ones(valid['labels'], n_classes)
 # X_test, Y_test = normalize_data(test['features']), create_hot_ones(test['labels'], n_classes)
 # # print("Save")

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import time
 import cv2
-
+import matplotlib.cm as cm
 def augment_brightness_camera_images(image):
 
     image1 = np.array(image, dtype = np.float64)
@@ -59,6 +59,13 @@ with open('X_train_Normalized.pickle', 'rb') as handle:
     X_train = pickle.load(handle)
 with open('y_train_Normalized.pickle', 'rb') as handle:
     y_train = pickle.load(handle)
+
+im_idx=1589
+im = np.uint8((X_train[im_idx, :, :, :]+0.5) * 255)
+
+plt.imsave('./images/writeup/before_augmentation.png', np.uint8(np.squeeze(im,axis=2)), cmap=cm.gray)
+img_aug = transform_image(im, 30, 5, 5)
+plt.imsave('./images/writeup/after_augmentation.png', img_aug, cmap=cm.gray)
 
 #plt_histogram(y_train)
 # convert hot ones to classes
