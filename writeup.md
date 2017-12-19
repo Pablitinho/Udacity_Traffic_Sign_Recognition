@@ -32,6 +32,21 @@ The goals / steps of this project are the following:
 [image9]: ./images/writeup/before_augmentation.png "Before Augmentation"
 [image10]: ./images/writeup/after_augmentation.png "After Augmentation"
 
+[image11]: ./images/writeup/120_small.bmp "Sample 1"
+[image12]: ./images/writeup/general_caution_small.bmp "Sample 2"
+[image13]: ./images/writeup/priority_road_small.bmp "Sample 3"
+[image14]: ./images/writeup/stop_signal_small.bmp "Sample 4"
+[image15]: ./images/writeup/Turn_right_ahead_small.bmp "Sample 5"
+
+[image16]: ./images/writeup/120_result.png "Result 1"
+[image17]: ./images/writeup/caution_result.png "Result 2"
+[image18]: ./images/writeup/priority_result.png "Result 3"
+[image19]: ./images/writeup/stop_result.png "Result 4"
+[image20]: ./images/writeup/right_result.png "Result 5"
+
+[image21]: ./images/writeup/caution_layer_3_output.png "Result 5"
+
+
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
@@ -133,9 +148,9 @@ If an iterative approach was chosen:
 * 
 * What were some problems with the initial architecture?
 * The accuracy was not very good and the convergence was quite slow.
-*  
+  
 * How was the architecture adjusted and why was it adjusted? 
-* 
+ 
 * Mainly playing with the L2 value, the number of filters in the CNN and the learning rate.
 
 
@@ -147,10 +162,10 @@ If an iterative approach was chosen:
 If a well known architecture was chosen:
 * What architecture was chosen?
 * Lenet5
-* 
+
 * Why did you believe it would be relevant to the traffic sign application?
 * Because it giving good results.
-* 
+ 
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
   
   Using other images out of the training,validation and test, i.e., images from internet and observe the prediction.
@@ -161,10 +176,13 @@ If a well known architecture was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image11]
+![alt text][image12]
+![alt text][image13]
+![alt text][image14]
+![alt text][image15]
 
-The first image might be difficult to classify because ...
+The first image might be difficult to classify because there are more speed signals in the dataset, the second one because there are more signals with triangles, the third one and forth one were randomly selected and the last one because can be confused with the left signal.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -172,33 +190,32 @@ Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Speed Limit 120      		| Speed Limit 120   									| 
+| General Caution    		| General Caution									|
+| Priority					| Priority										|
+| Stop	      		              | Stop				 				|
+| Turn Right			       | Turn Right      							|
 
-
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. 
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+![alt text][image16]
+![alt text][image17]
+![alt text][image18]
+![alt text][image19]
+![alt text][image20]
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+In the 5 traffic signs chosen I got almost 1.0 per each prediction. Check at the end of the notebook for more detail and more examples.
 
 
-For the second image ... 
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
+Here we have the output of the layer 3 in the caution traffic sign:
 
+![alt text][image12]
+![alt text][image21]
+
+We can see that the output from the layer are mainly features in the image like corners and orientations ( a corner can be a specific orientation, it is just one way to do the interpretation)
