@@ -107,7 +107,8 @@ My final model consisted of the following layers:
 | Max pooling     | 2x2 stride,outputs 8x8x16                  |
 | Convolution 3x3 | 1x1 stride, same padding, outputs 8x8x64   |
 | Relu            | Activation Operation                       |
- 
+| Full connected            | Full connected Neuronal Network |
+| SoftMax  | Softmax operation |
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
